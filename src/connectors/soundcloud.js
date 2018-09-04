@@ -5,7 +5,6 @@ window.SC_ATTACHED = window.SC_ATTACHED || false;
 let currentState = {};
 /**
  * Flag indicates now playing track is private.
- * The extension does not scrobble such tracks.
  * @type {Boolean}
  */
 let isPrivate = false;
@@ -29,8 +28,6 @@ Connector.getCurrentState = () => {
 	return currentState;
 };
 
-Connector.isScrobblingAllowed = () => !isPrivate;
-
 Connector.filter = MetadataFilter.getYoutubeFilter();
 
 Connector.getCurrentTime = () => {
@@ -47,11 +44,6 @@ Connector.isPlaying = () => {
  */
 function setSongData(metadata) {
 	isPrivate = metadata.sharing === 'private';
-
-	if (isPrivate) {
-		currentState = {};
-		return;
-	}
 
 	// Sometimes the artist name is in the track title,
 	// e.g. Tokyo Rose - Zender Overdrive by Aphasia Records.
